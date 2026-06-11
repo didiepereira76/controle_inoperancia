@@ -271,7 +271,7 @@ with col_logo:
     st.image("radar_icon.png", width=64)
 with col_title:
     st.markdown("<h1 class='dashboard-title'>Controle de Inoperância de Radares</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='dashboard-subtitle'>CET Santos - Painel de conferência</p>", unsafe_allow_html=True)
+    st.markdown("<p class='dashboard-subtitle'>GTSV - Gerência de Tecnologia em Sistema Viário</p>", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # Bloco de Filtros
