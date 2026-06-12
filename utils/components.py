@@ -14,6 +14,10 @@ def render_metrics(dff):
     total_equip = dff["Equipamento"].nunique()
     media_horas = dff["Inoperancia_Horas"].mean() if len(dff) > 0 else 0
     
+    # Formatação de números no padrão brasileiro
+    total_horas_fmt = f"{total_horas:,.0f}".replace(",", ".")
+    media_horas_fmt = f"{media_horas:,.1f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    
     c1, c2, c3, c4 = st.columns(4)
     with c1:
         st.markdown(f"""
@@ -26,7 +30,7 @@ def render_metrics(dff):
         st.markdown(f"""
         <div class='metric-card'>
             <div class='metric-label'>Inoperância Acumulada</div>
-            <div class='metric-value'>{total_horas:,.0f}h</div>
+            <div class='metric-value'>{total_horas_fmt}h</div>
         </div>
         """, unsafe_allow_html=True)
     with c3:
@@ -40,7 +44,7 @@ def render_metrics(dff):
         st.markdown(f"""
         <div class='metric-card'>
             <div class='metric-label'>Média Horas / Ocorrência</div>
-            <div class='metric-value'>{media_horas:.1f}h</div>
+            <div class='metric-value'>{media_horas_fmt}h</div>
         </div>
         """, unsafe_allow_html=True)
 
