@@ -22,7 +22,7 @@ def render_metrics(dff):
     with c1:
         st.markdown(f"""
         <div class='metric-card'>
-            <div class='metric-label'>Número(s) CE</div>
+            <div class='metric-label'>Número CE'S</div>
             <div class='metric-value'>{total_ce}</div>
         </div>
         """, unsafe_allow_html=True)
