@@ -22,7 +22,7 @@ def render_metrics(dff):
     with c1:
         st.markdown(f"""
         <div class='metric-card'>
-            <div class='metric-label'>Número CE'S</div>
+            <div class='metric-label'>Número CE's</div>
             <div class='metric-value'>{total_ce}</div>
         </div>
         """, unsafe_allow_html=True)
@@ -176,5 +176,7 @@ def render_analytical_table(dff):
         label="📥 Exportar Tabela Analítica (CSV)",
         data=csv_buffer,
         file_name="inoperancia_radares_filtrado.csv",
-        mime="text/csv"
+        mime="text/csv",
+        key="btn_export_csv"
     )
+
