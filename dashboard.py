@@ -21,6 +21,11 @@ if os.path.exists("assets/styles.css"):
     with open("assets/styles.css", "r", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+# Botão na barra lateral para forçar atualização dos dados (limpar cache)
+if st.sidebar.button("🔄 Atualizar Dados da Planilha", use_container_width=True):
+    st.cache_data.clear()
+    st.rerun()
+
 # Carrega a base de dados
 df = carregar_dados_sistema()
 
@@ -81,6 +86,10 @@ st.markdown("<hr>", unsafe_allow_html=True)
 render_monthly_history(dff, MESES)
 
 st.markdown("<hr>", unsafe_allow_html=True)
+
+# 4. Detalhes analíticos e Exportação em Tabela
+render_analytical_table(dff)
+
 
 # 4. Detalhes analíticos e Exportação em Tabela
 render_analytical_table(dff)
