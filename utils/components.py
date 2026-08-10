@@ -170,6 +170,7 @@ def render_analytical_table(dff):
     html_table = tabela.to_html(classes="premium-table", index=False, border=0, justify="left")
     st.markdown(f'<div class="premium-table-container">{html_table}</div><br>', unsafe_allow_html=True)
 
+    import uuid
     # Botão de exportação
     csv_buffer = tabela.to_csv(index=False).encode('utf-8-sig')
     st.download_button(
@@ -177,6 +178,5 @@ def render_analytical_table(dff):
         data=csv_buffer,
         file_name="inoperancia_radares_filtrado.csv",
         mime="text/csv",
-        key="btn_export_csv"
+        key=f"btn_export_csv_{uuid.uuid4().hex}"
     )
-
