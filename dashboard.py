@@ -89,7 +89,3 @@ st.markdown("<hr>", unsafe_allow_html=True)
 
 # 4. Detalhes analíticos e Exportação em Tabela
 render_analytical_table(dff)
-
-
-# 4. Detalhes analíticos e Exportação em Tabela
-render_analytical_table(dff)
