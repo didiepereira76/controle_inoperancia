@@ -56,18 +56,20 @@ def render_impact_charts(dff):
     
     with col_a:
         st.markdown("#### ⏳ CEs com maior impacto (Top 10)")
-        ce_group = (dff.groupby("Numero_CE")["Inoperancia_Horas"]
+        ce_group = (dff.groupby(["Numero_CE", "Ano"])["Inoperancia_Horas"]
                     .sum().sort_values(ascending=True).tail(10).reset_index())
-        fig_ce = px.bar(ce_group, x="Inoperancia_Horas", y="Numero_CE",
+        ce_group["CE_ID"] = ce_group["Numero_CE"].astype(str) + " (" + ce_group["Ano"].astype(str) + ")"
+        fig_ce = px.bar(ce_group, x="Inoperancia_Horas", y="CE_ID",
                         orientation="h", text="Inoperancia_Horas",
                         color_discrete_sequence=["#c8f050"],
-                        labels={"Inoperancia_Horas": "Inoperância em Horas", "Numero_CE": "Número de CE's"})
+                        custom_data=["Numero_CE", "Ano"],
+                        labels={"Inoperancia_Horas": "Inoperância em Horas", "CE_ID": "Número de CE's"})
         
         # Customização visual do gráfico (bordas arredondadas, fundo transparente, tooltip premium)
         fig_ce.update_traces(
             texttemplate="%{text:.1f}h", 
             textposition="outside",
-            hovertemplate="<b>%{y}</b><br><b>Inoperância:</b> %{x:.1f} horas<extra></extra>",
+            hovertemplate="<b>%{customdata[0]}</b><br><b>Ano:</b> %{customdata[1]}<br><b>Inoperância:</b> %{x:.1f} horas<extra></extra>",
             marker=dict(cornerradius=6)
         )
         fig_ce.update_layout(
@@ -76,7 +78,12 @@ def render_impact_charts(dff):
             font_color="#cbd5e1", 
             margin=dict(l=10, r=40, t=10, b=10),
             xaxis=dict(showgrid=False, showticklabels=False),
-            yaxis=dict(showgrid=False), 
+            yaxis=dict(
+                showgrid=False,
+                tickmode="array",
+                tickvals=ce_group["CE_ID"],
+                ticktext=ce_group["Numero_CE"]
+            ), 
             height=360
         )
         st.plotly_chart(fig_ce, width="stretch", config={'displayModeBar': False})
