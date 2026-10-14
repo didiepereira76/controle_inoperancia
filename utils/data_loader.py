@@ -59,17 +59,8 @@ def carregar_dados_sistema():
     locais = pd.read_csv("Controle_de_CE_-_locais.csv", encoding="utf-8")
     locais.columns = ["Serie", "Locais", "Sentido"]
         
-    # Processamento e Limpeza Compartilhada
+    # Tratamento da data
     df["Data"] = pd.to_datetime(df["Data"], dayfirst=True, errors="coerce")
-    
-    # IMPORTANTE: Alinha o ano da Data com o Ano correspondente do arquivo de origem
-    df["Data"] = df.apply(
-        lambda row: row["Data"].replace(year=row["Ano"]) if pd.notna(row["Data"]) else row["Data"], 
-        axis=1
-    )
-    
-    # IMPORTANTE: Filtra datas no futuro (evita exibir dados futuros para o ano corrente)
-    df = df[df["Data"].isna() | (df["Data"] <= pd.Timestamp.now())]
     
     df["Mes"] = df["Data"].dt.month
     df["Inoperancia_Horas"] = df["Inoperancia_Minutos"] / 60
