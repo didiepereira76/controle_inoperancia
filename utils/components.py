@@ -7,8 +7,13 @@ def render_metrics(dff):
     Calcula e renderiza os cartões de métricas premium na tela.
     """
     # Correção na contagem de CEs: trata corretamente valores agrupados por pipe (ex: "CE: 09 | CE: 10")
-    all_ces = dff["Numero_CE"].dropna().str.split(r'\s*\|\s*').explode().str.strip().unique()
-    total_ce = len([ce for ce in all_ces if ce])
+    # e considera o Ano para que CEs com mesmo número em anos diferentes sejam computadas individualmente
+    exploded = dff[["Numero_CE", "Ano"]].dropna().copy()
+    exploded["Numero_CE"] = exploded["Numero_CE"].astype(str).str.split(r'\s*\|\s*')
+    exploded = exploded.explode("Numero_CE")
+    exploded["Numero_CE"] = exploded["Numero_CE"].str.strip()
+    exploded = exploded[exploded["Numero_CE"] != ""]
+    total_ce = exploded[["Numero_CE", "Ano"]].drop_duplicates().shape[0]
     
     total_horas = dff["Inoperancia_Horas"].sum()
     total_equip = dff["Equipamento"].nunique()
