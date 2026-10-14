@@ -30,7 +30,9 @@ def carregar_dados_sistema():
     # Carrega dados do ano atual (2026)
     if SPREADSHEET_ID:
         try:
-            url_26 = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet={TAB_2026}"
+            import time
+            timestamp = int(time.time())
+            url_26 = f"https://docs.google.com/spreadsheets/d/{SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet={TAB_2026}&_t={timestamp}"
             df26 = pd.read_csv(url_26, encoding="utf-8")
             # Validação crítica: se a planilha do Google não estiver compartilhada publicamente,
             # a requisição retorna a página HTML de login do Google. O Pandas lê a página sem gerar erro,
