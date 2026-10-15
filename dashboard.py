@@ -1,7 +1,10 @@
-import os
-import pandas as pd
+from pathlib import Path
+
 import streamlit as st
 from utils.data_loader import carregar_dados_sistema, MESES
+
+# Diretório do projeto, para localizar assets independentemente do cwd
+BASE_DIR = Path(__file__).resolve().parent
 from utils.components import (
     render_metrics,
     render_impact_charts,
@@ -10,16 +13,17 @@ from utils.components import (
 )
 
 # Configuração da página - Ícone e Título
+RADAR_ICON = str(BASE_DIR / "radar_icon.png")
 st.set_page_config(
     page_title="Controle de Inoperância de Radares",
-    page_icon="radar_icon.png",
+    page_icon=RADAR_ICON,
     layout="wide"
 )
 
 # Estilização CSS Avançada - Carregada do arquivo modularizado
-if os.path.exists("assets/styles.css"):
-    with open("assets/styles.css", "r", encoding="utf-8") as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+css_path = BASE_DIR / "assets" / "styles.css"
+if css_path.exists():
+    st.markdown(f"<style>{css_path.read_text(encoding='utf-8')}</style>", unsafe_allow_html=True)
 
 # Botão na barra lateral para forçar atualização dos dados (limpar cache)
 if st.sidebar.button("🔄 Atualizar Dados da Planilha", use_container_width=True):
@@ -34,7 +38,7 @@ col_logo, col_title = st.columns([1, 15])
 with col_logo:
     # Ajuste de espaçamento vertical para centralizar o logotipo com o título
     st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
-    st.image("radar_icon.png", width=64)
+    st.image(RADAR_ICON, width=64)
 with col_title:
     st.markdown("<h1 class='dashboard-title'>Controle de Inoperância de Radares</h1>", unsafe_allow_html=True)
     st.markdown("<p class='dashboard-subtitle'>GTSV - Gerência de Tecnologia em Sistema Viário</p>", unsafe_allow_html=True)
