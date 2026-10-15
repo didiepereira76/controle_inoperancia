@@ -12,7 +12,7 @@ Dashboard interno para monitorar a **inoperância de radares (equipamentos de fi
 
 ## 2. Problema que resolve
 
-As ocorrências de inoperância (CEs — Comunicados de Evento) são registradas em planilhas. Faltava uma visão consolidada que respondesse rapidamente:
+As ocorrências de inoperância (CEs — Comunicados Externos) são registradas em planilhas. Faltava uma visão consolidada que respondesse rapidamente:
 
 - Quanto tempo total os radares ficaram inoperantes?
 - Quais radares e quais CEs concentram o maior impacto?
