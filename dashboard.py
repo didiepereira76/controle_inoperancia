@@ -52,7 +52,12 @@ with col1:
 with col2:
     # UX aprimorada: mapeamento do seletor de equipamentos mostrando também o endereço
     df_equip_map = df[df["Ano"].isin(ano_sel)][["Equipamento", "Locais"]].drop_duplicates().sort_values("Equipamento")
-    df_equip_map["Exibicao"] = df_equip_map["Equipamento"] + " - " + df_equip_map["Locais"]
+    # Monta os rótulos elemento a elemento para evitar incompatibilidades entre
+    # os tipos de string do Pandas e do PyArrow no Streamlit Cloud.
+    df_equip_map["Exibicao"] = [
+        f"{equipamento} - {local}"
+        for equipamento, local in zip(df_equip_map["Equipamento"], df_equip_map["Locais"])
+    ]
     equipamentos = ["Todos"] + df_equip_map["Exibicao"].tolist()
     equip_sel = st.selectbox("Equipamento", equipamentos)
 with col3:
