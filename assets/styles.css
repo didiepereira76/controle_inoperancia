@@ -105,17 +105,14 @@ html, body, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
     font-size: clamp(0.8rem, 0.95vw, 0.9rem) !important;
 }
 
-/* Contraste dos badges de seleção (Texto preto sobre o verde CET) */
-span[data-baseweb="tag"],
-span[data-baseweb="tag"] span, 
-span[data-baseweb="tag"] svg,
-span[data-baseweb="tag"] button,
-div[data-baseweb="tag"],
-div[data-baseweb="tag"] span,
-div[data-baseweb="tag"] svg,
-div[data-baseweb="tag"] button {
-    color: #0b0d10 !important;
-    fill: #0b0d10 !important;
+/* Contraste dos retângulos de seleção de Ano (stMultiSelect) */
+div[data-testid="stMultiSelect"] [data-baseweb="tag"],
+div[data-testid="stMultiSelect"] [data-baseweb="tag"] *,
+.stMultiSelect [data-baseweb="tag"],
+.stMultiSelect [data-baseweb="tag"] * {
+    color: #0b0d10 !important; /* Cor da fonte (Preto grafite para máximo contraste sobre o verde) */
+    fill: #0b0d10 !important;  /* Cor do ícone 'x' de remoção */
+    font-weight: 600 !important;
 }
 
 /* Separadores de seção modernos */
