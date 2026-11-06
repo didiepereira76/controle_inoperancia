@@ -1,3 +1,4 @@
+import base64
 from pathlib import Path
 
 import streamlit as st
@@ -33,15 +34,22 @@ if st.sidebar.button("🔄 Atualizar Dados da Planilha", use_container_width=Tru
 # Carrega a base de dados
 df = carregar_dados_sistema()
 
-# Cabeçalho da página com logotipo alinhado à esquerda
-col_logo, col_title = st.columns([1, 15])
-with col_logo:
-    # Ajuste de espaçamento vertical para centralizar o logotipo com o título
-    st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
-    st.image(RADAR_ICON, width=64)
-with col_title:
-    st.markdown("<h1 class='dashboard-title'>Controle de Inoperância de Radares</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='dashboard-subtitle'>GTSV - Gerência de Tecnologia em Sistema Viário</p>", unsafe_allow_html=True)
+# Cabeçalho da página com logotipo alinhado à esquerda (Flexbox 100% responsivo)
+icon_b64 = ""
+if Path(RADAR_ICON).exists():
+    icon_b64 = base64.b64encode(Path(RADAR_ICON).read_bytes()).decode()
+
+logo_html = f"<img src='data:image/png;base64,{icon_b64}' class='header-logo' alt='Radar' />" if icon_b64 else ""
+
+st.markdown(f"""
+<div class='header-container'>
+    {logo_html}
+    <div class='header-text'>
+        <h1 class='dashboard-title'>Controle de Inoperância de Radares</h1>
+        <p class='dashboard-subtitle'>GTSV - Gerência de Tecnologia em Sistema Viário</p>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 st.markdown("<hr>", unsafe_allow_html=True)
 
 # Bloco de Filtros
@@ -52,12 +60,7 @@ with col1:
 with col2:
     # UX aprimorada: mapeamento do seletor de equipamentos mostrando também o endereço
     df_equip_map = df[df["Ano"].isin(ano_sel)][["Equipamento", "Locais"]].drop_duplicates().sort_values("Equipamento")
-    # Monta os rótulos elemento a elemento para evitar incompatibilidades entre
-    # os tipos de string do Pandas e do PyArrow no Streamlit Cloud.
-    df_equip_map["Exibicao"] = [
-        f"{equipamento} - {local}"
-        for equipamento, local in zip(df_equip_map["Equipamento"], df_equip_map["Locais"])
-    ]
+    df_equip_map["Exibicao"] = df_equip_map["Equipamento"] + " - " + df_equip_map["Locais"]
     equipamentos = ["Todos"] + df_equip_map["Exibicao"].tolist()
     equip_sel = st.selectbox("Equipamento", equipamentos)
 with col3:
