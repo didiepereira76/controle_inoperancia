@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -7,10 +8,13 @@ import streamlit as st
 # independentemente de qual pasta a aplicação foi iniciada.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Configuração para carregar o ano atual (2026) diretamente do Google Planilhas (Opcional)
-# Caso queira integrar online para o ano ativo, insira o ID da sua planilha abaixo.
-# Deixe em branco "" para ler o arquivo CSV local de 2026.
-SPREADSHEET_ID = "1b5Mv47_1BnW7yy7U2ijL46qo4vmEDIWNcI0DZiMOWZ0"
+# ID da Planilha Google obtido com segurança via Streamlit Secrets ou variável de ambiente.
+# Mantém o valor padrão como fallback seguro para garantir funcionamento imediato.
+DEFAULT_SPREADSHEET_ID = "1b5Mv47_1BnW7yy7U2ijL46qo4vmEDIWNcI0DZiMOWZ0"
+try:
+    SPREADSHEET_ID = st.secrets.get("SPREADSHEET_ID", DEFAULT_SPREADSHEET_ID)
+except Exception:
+    SPREADSHEET_ID = os.getenv("SPREADSHEET_ID", DEFAULT_SPREADSHEET_ID)
 
 # Se a planilha online for usada, defina o nome exato da aba para os dados de 2026
 TAB_2026 = "BD_Looker"
