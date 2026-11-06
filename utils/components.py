@@ -190,6 +190,18 @@ def render_monthly_history(dff, meses_dict):
     st.plotly_chart(fig_mes, width="stretch", config={'displayModeBar': False, 'responsive': True})
 
 
+def _sanitizar_csv(df_export):
+    """Protege contra CSV Formula Injection (CWE-1236) prefixando com apóstrofo
+    qualquer texto que comece com caracteres especiais interpretados pelo Excel."""
+    df_clean = df_export.copy()
+    caracteres_perigosos = ('=', '+', '-', '@', '\t', '\r')
+    for col in df_clean.select_dtypes(include=['object', 'string']).columns:
+        df_clean[col] = df_clean[col].astype(str).apply(
+            lambda x: f"'{x}" if x.startswith(caracteres_perigosos) else x
+        )
+    return df_clean
+
+
 def render_analytical_table(dff):
     """
     Renderiza a tabela analítica interativa e o botão para exportação em CSV.
@@ -209,8 +221,9 @@ def render_analytical_table(dff):
     html_table = tabela.to_html(classes="premium-table", index=False, border=0, justify="left")
     st.markdown(f'<div class="premium-table-container">{html_table}</div><br>', unsafe_allow_html=True)
 
-    # Botão de exportação (key estável — não usar valor aleatório, que recria o widget a cada rerun)
-    csv_buffer = tabela.to_csv(index=False).encode('utf-8-sig')
+    # Botão de exportação protegido contra CSV Injection
+    tabela_csv = _sanitizar_csv(tabela)
+    csv_buffer = tabela_csv.to_csv(index=False).encode('utf-8-sig')
     st.download_button(
         label="📥 Exportar Tabela Analítica (CSV)",
         data=csv_buffer,
