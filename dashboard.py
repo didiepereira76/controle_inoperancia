@@ -1,4 +1,5 @@
 import base64
+import time
 from pathlib import Path
 
 import streamlit as st
@@ -26,10 +27,20 @@ css_path = BASE_DIR / "assets" / "styles.css"
 if css_path.exists():
     st.markdown(f"<style>{css_path.read_text(encoding='utf-8')}</style>", unsafe_allow_html=True)
 
-# Botão na barra lateral para forçar atualização dos dados (limpar cache)
-if st.sidebar.button("🔄 Atualizar Dados da Planilha", use_container_width=True):
-    st.cache_data.clear()
-    st.rerun()
+# Botão na barra lateral com proteção contra rate-limit / spam de requisições
+COOLDOWN_ATUALIZACAO = 30  # segundos mínimos entre recargas forçadas da planilha
+if st.sidebar.button("🔄 Atualizar Dados da Planilha", width="stretch"):
+    agora = time.time()
+    ultimo_update = st.session_state.get("ultimo_update_manual", 0)
+    tempo_passado = agora - ultimo_update
+
+    if tempo_passado < COOLDOWN_ATUALIZACAO:
+        restante = int(COOLDOWN_ATUALIZACAO - tempo_passado)
+        st.sidebar.warning(f"⏳ Aguarde {restante}s antes de atualizar novamente.")
+    else:
+        st.session_state["ultimo_update_manual"] = agora
+        st.cache_data.clear()
+        st.rerun()
 
 # Carrega a base de dados
 df = carregar_dados_sistema()
