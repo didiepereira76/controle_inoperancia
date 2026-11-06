@@ -27,6 +27,7 @@ def _aplicar_tema(fig):
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font_color="#cbd5e1",
+        autosize=True,
     )
     return fig
 
@@ -119,7 +120,7 @@ def render_impact_charts(dff):
             ),
             height=360
         )
-        st.plotly_chart(fig_ce, width="stretch", config={'displayModeBar': False})
+        st.plotly_chart(fig_ce, width="stretch", config={'displayModeBar': False, 'responsive': True})
 
     with col_b:
         st.markdown("#### 🚦 Ranking de Equipamentos mais Inoperantes")
@@ -141,11 +142,11 @@ def render_impact_charts(dff):
         _aplicar_tema(fig_eq)
         fig_eq.update_layout(
             margin=dict(l=10, r=10, t=30, b=10),
-            xaxis=dict(showgrid=False, type="category"),
+            xaxis=dict(showgrid=False, type="category", tickangle=-45),
             yaxis=dict(showgrid=False, showticklabels=False),
             height=360
         )
-        st.plotly_chart(fig_eq, width="stretch", config={'displayModeBar': False})
+        st.plotly_chart(fig_eq, width="stretch", config={'displayModeBar': False, 'responsive': True})
 
 
 def render_monthly_history(dff, meses_dict):
@@ -186,7 +187,7 @@ def render_monthly_history(dff, meses_dict):
         ),
         height=320
     )
-    st.plotly_chart(fig_mes, width="stretch", config={'displayModeBar': False})
+    st.plotly_chart(fig_mes, width="stretch", config={'displayModeBar': False, 'responsive': True})
 
 
 def render_analytical_table(dff):
